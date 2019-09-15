@@ -1,0 +1,17 @@
+#function para cadastro de usuarios
+createUser:
+  warmup: true
+  handler: src/services/users/endpoints/createUser.handler
+  events:
+    - http: 
+        path: /users
+        method: post
+
+#function para a listagem de usuarios
+findUsers:
+  warmup: true
+  handler: src/services/users/endpoints/findUsers.handler
+  events:
+    - http:
+        path: /users
+        method: get
