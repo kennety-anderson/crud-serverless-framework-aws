@@ -31,13 +31,11 @@ describe('Create user:', () => {
     createConnection.mockImplementation(() => Promise.resolve(true))
   })
 
-  test('verify user ceated successfully:', async done => {
+  it('verify user ceated successfully:', async done => {
     mockingoose(User).toReturn(user, 'save') // simula o metodo save do user
     const event = { body: { ...user } }
 
     const result = await handler(event, context)
-
-    console.log(result.body, 'log result.body')
 
     expect(result).toHaveProperty('statusCode', 200)
     expect(result).toHaveProperty('body')
