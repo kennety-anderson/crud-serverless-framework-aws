@@ -13,13 +13,13 @@ jest.mock('../../../database/mongo/connection')
 describe('Create user:', () => {
   const _id = new mongoose.Types.ObjectId().toHexString()
   const user = {
-    _id,
-    name: 'kenny',
-    email: 'kem@gmail.com',
-    cpf: '01234567891',
-    password: '12345678',
-    birthDate: '01/01/2000'
-  } // exemplo de um objeto de cadastro de user
+      _id,
+      name: 'kenny',
+      email: 'kem@gmail.com',
+      cpf: '01234567891',
+      password: '12345678',
+      birthDate: '01/01/2000'
+    } // exemplo de um objeto de cadastro de user
 
   const context = {}
 
@@ -28,18 +28,35 @@ describe('Create user:', () => {
   })
 
   beforeAll(() => {
-    createConnection.mockImplementation(() => Promise.resolve(true))
+    createConnection.mockImplementation(() => Promise.resolve())
   })
 
   it('verify user ceated successfully:', async done => {
     mockingoose(User).toReturn(user, 'save') // simula o metodo save do user
-    const event = { body: { ...user } }
+    const event = { body: {...user } }
 
     const result = await handler(event, context)
 
     expect(result).toHaveProperty('statusCode', 200)
     expect(result).toHaveProperty('body')
     expect(JSON.parse(result.body)).toHaveProperty('_id')
+    done()
+  })
+
+  it('testing creation driver error', async(done) => {
+    const context = {}
+    const event = { body: user } // sem stringify
+
+    const err = new mongoose.Error.ValidationError
+
+    mockingoose(User).toReturn(err, 'save')
+
+    const result = await handler(event, context)
+
+    expect(result).toHaveProperty('statusCode', 400)
+    expect(result).toHaveProperty('body')
+
+    // expect(JSON.parse(result.body)).toHaveProperty('message', 'Timeout')
     done()
   })
 })

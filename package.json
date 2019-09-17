@@ -14,6 +14,7 @@
     "aws-sdk": "^2.526.0",
     "bcryptjs": "^2.4.3",
     "http-errors": "^1.7.3",
+    "mongodb": "^3.3.2",
     "mongoose": "^5.7.0"
   },
   "devDependencies": {

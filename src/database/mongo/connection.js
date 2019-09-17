@@ -1,8 +1,9 @@
 const { connect, connection } = require('mongoose')
+const createError = require('http-errors')
 
 let hasConnection = false
 
-const createConnection = async (uri = process.env.MONGO_URI) => {
+const createConnection = async(uri = process.env.MONGO_URI) => {
   if (hasConnection) return
 
   console.log(process.env.MONGO_URI)
@@ -17,8 +18,9 @@ const createConnection = async (uri = process.env.MONGO_URI) => {
     keepAlive: true
   }, (err) => {
     if (err) {
-      console.log(`========= erro de conexão do mongo 
-            ${err}`)
+      console.log(`Erro de conexão mongo ${err}`);
+      //criar resposta de erro para um erro de conexão 
+      throw createError(500)
     }
   })
 

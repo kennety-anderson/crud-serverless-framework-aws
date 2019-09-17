@@ -22,5 +22,5 @@ findOneUser:
   handler: src/services/users/endpoints/findOneUser.handler
   events:
     - http:
-        path: /user
+        path: /users/{id}
         method: get
