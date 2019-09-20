@@ -10,6 +10,7 @@ jest.mock('../../../database/mongo/connection')
 
 describe('Find and list users', () => {
   const _id = new mongoose.Types.ObjectId().toHexString()
+
   const user = {
     _id,
     name: 'kenny',
@@ -40,6 +41,20 @@ describe('Find and list users', () => {
     expect(result).toHaveProperty('statusCode', 200)
     expect(result).toHaveProperty('body')
     expect(JSON.parse(result.body).users).toHaveLength(1)
+    done()
+  })
+
+  it('finding users error', async done => {
+    const event = { queryStringParameters: {} }
+
+    mockingoose(User).toReturn(new Error('Timeout'), 'find')
+
+    try {
+      await handler(event, context)
+    } catch (err) {
+      expect(err.message).toEqual('Timeout')
+    }
+
     done()
   })
 })
