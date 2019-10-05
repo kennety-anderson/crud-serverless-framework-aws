@@ -18,9 +18,17 @@ findUsers:
 
 #function para a bsca de um unico usuario
 findOneUser:
-  warmup: true,
+  warmup: true
   handler: src/services/users/endpoints/findOneUser.handler
   events:
     - http:
         path: /users/{id}
         method: get
+
+updateUser: 
+  warmup: true
+  handler: src/services/users/endpoints/updateUser.handler
+  events:
+    - http:
+        path: /users/{id}
+        method: put
