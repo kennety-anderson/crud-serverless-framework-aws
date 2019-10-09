@@ -13,35 +13,37 @@
                 "id"
             ]
         },
-        "id": {
-            "type": "string",
-            "pattern": "^(.*)$"
-        }
-    },
-    "body": {
-        "type": "object",
         "properties": {
-            "name": {
+            "id": {
                 "type": "string",
-                "minLength": 3,
                 "pattern": "^(.*)$"
-            },
-            "email": {
-                "type": "string",
-                "format": "email"
-            },
-            "password": {
-                "type": "string",
-                "minLength": 8
-            },
-            "cpf": {
-                "type": "string",
-                "minLength": 11,
-                "maxLength": 11
-            },
-            "birthDate": {
-                "type": "string",
-                "format": "date"
+            }
+        },
+        "body": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "pattern": "^(.*)$"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "cpf": {
+                    "type": "string",
+                    "minLength": 11,
+                    "maxLength": 11
+                },
+                "birthDate": {
+                    "type": "string",
+                    "format": "date"
+                }
             }
         }
     }

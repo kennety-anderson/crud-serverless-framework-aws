@@ -18,7 +18,7 @@ describe('Create user:', () => {
     email: 'kem@gmail.com',
     cpf: '01234567891',
     password: '12345678',
-    birthDate: '01/01/2000'
+    birthDate: '2000-01-01'
   } // exemplo de um objeto de cadastro de user
 
   const context = {}

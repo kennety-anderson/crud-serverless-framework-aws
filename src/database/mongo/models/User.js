@@ -52,12 +52,13 @@ UserSchema.pre('save', async function (next) {
 
 // encriptação ao atualizar
 UserSchema.pre('findOneAndUpdate', async function (next) {
-  console.log(this._update)
+  if (!this._update) next()
 
-  const { password } = this._update
-
-  if (password) this._update.password = await bcrypt.hash(password, 10)
-  console.log(this._update.password)
+  if (this._update.password) {
+    this._update.password = await bcrypt.hash(this._update.password, 10)
+    next()
+  }
+  // console.log(this._update.password)
   next()
 })
 

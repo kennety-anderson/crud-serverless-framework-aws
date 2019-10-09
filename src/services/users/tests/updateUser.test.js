@@ -7,6 +7,7 @@ const { createConnection } = require('../../../database/mongo/connection')
 const { handler } = require('../endpoints/updateUser')
 const User = require('../../../database/mongo/models/User')
 const { ObjectId } = require('mongodb')
+const mongodb = require('mongodb')
 const createError = require('http-errors')
 
 // mock opcional pois require do mockingoose ja mock a conexão
@@ -20,7 +21,7 @@ describe('Test update user:', () => {
     email: 'kem@gmail.com',
     cpf: '01234567891',
     password: '12345678',
-    birthDate: '01/01/2000'
+    birthDate: '2000-01-01'
   } // exemplo de um objeto de cadastro de user
 
   const context = {}
@@ -34,7 +35,7 @@ describe('Test update user:', () => {
   })
 
   it('update as successfully:', async done => {
-    const event = { pathParameters: { id: _id } }
+    const event = { pathParameters: { id: _id }, body: { ...user } }
 
     mockingoose(User).toReturn(user, 'findOneAndUpdate')
 
@@ -48,7 +49,7 @@ describe('Test update user:', () => {
 
   it('received id malformed:', async done => {
     let id = 'abc'
-    const event = { pathParameters: { id } }
+    const event = { pathParameters: { id }, body: { ...user } }
 
     if (ObjectId.isValid(id)) {
       mockingoose(User).toReturn({ id: 1 }, 'findOneAndUpdate')
@@ -64,7 +65,7 @@ describe('Test update user:', () => {
 
   it('user is not found:', async done => {
     const id = 1
-    const event = { pathParameters: { id } }
+    const event = { pathParameters: { id }, body: { ...user } }
 
     mockingoose(User).toReturn(null, 'findOneAndUpdate')
 
@@ -85,6 +86,18 @@ describe('Test update user:', () => {
       expect(err.message).toEqual('Timeout')
     }
 
+    done()
+  })
+
+  it('internal server error:', async done => {
+    const event = { pathParameters: { id: _id }, body: { ...user } }
+    const error = mongodb.MongoError
+
+    mockingoose(User).toReturn(error, 'findOneAndUpdate')
+
+    const result = await handler(event, context)
+
+    expect(result).toHaveProperty('statusCode', 500)
     done()
   })
 })

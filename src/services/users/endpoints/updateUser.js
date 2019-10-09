@@ -33,7 +33,12 @@ const handler = middy(async (event, context) => {
     }
   } catch (err) {
     console.log(err)
-    throw createError(err.statusCode, err.message)
+    if (err.statusCode && err.message) {
+      throw createError(err.statusCode, err.message)
+    }
+
+    // criação de um erro de requisição mal formada
+    throw createError(500)
   }
 })
 

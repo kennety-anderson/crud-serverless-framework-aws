@@ -31,7 +31,6 @@ const handler = middy(async (event, context) => {
       })
     }
   } catch (err) {
-    console.log(err)
     // erifica se é um erro de validação para dar uma resposta persoanlizada ao cliente
     if (err.name === 'ValidationError') {
       throw createError(400, 'Erro de validação verifique os campos enviados')

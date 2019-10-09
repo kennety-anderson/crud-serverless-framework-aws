@@ -3,6 +3,7 @@
 const middy = require('@middy/core')
 const doNotWaitForEmptyEventLoop = require('@middy/do-not-wait-for-empty-event-loop')
 const warmup = require('@middy/warmup')
+const cors = require('@middy/http-cors')
 const httpErrorHandler = require('@middy/http-error-handler')
 const createError = require('http-errors')
 const { createConnection } = require('../../../database/mongo/connection')
