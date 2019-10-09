@@ -25,10 +25,18 @@ findOneUser:
         path: /users/{id}
         method: get
 
-updateUser: 
+updateUser:
   warmup: true
   handler: src/services/users/endpoints/updateUser.handler
   events:
     - http:
         path: /users/{id}
         method: put
+
+deleteUser:
+  warmup: true
+  handler: src/services/users/endpoints/deleteUser.handler
+  events:
+    - http:
+        path: /users/{id}
+        method: delete

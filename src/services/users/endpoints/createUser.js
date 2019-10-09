@@ -1,19 +1,22 @@
 'use strict'
 
-const AWS = require('aws-sdk')
+// const AWS = require('aws-sdk')
 const middy = require('@middy/core')
 const doNotWaitForEmptyEventLoop = require('@middy/do-not-wait-for-empty-event-loop')
-  // const warmup = require('@middy/warmup')
+const warmup = require('@middy/warmup')
+const cors = require('@middy/http-cors')
 const httpErrorHandler = require('@middy/http-error-handler')
 const jsonBodyParser = require('@middy/http-json-body-parser')
 const urlEncodeBodyParser = require('@middy/http-urlencode-body-parser')
+const validator = require('@middy/validator')
+const jsonRequest = require('../../../../models/users/requests/create.json')
 const createError = require('http-errors')
 const { createConnection } = require('../../../database/mongo/connection')
 const User = require('../../../database/mongo/models/User')
 
-const sns = new AWS.SNS()
+// const sns = new AWS.SNS()
 
-const handler = middy(async(event, context) => {
+const handler = middy(async (event, context) => {
   const body = event.body
 
   try {
@@ -28,22 +31,24 @@ const handler = middy(async(event, context) => {
       })
     }
   } catch (err) {
-
-    //erifica se é um erro de validação para dar uma resposta persoanlizada ao cliente
-    if (err.name === 'ValidationError')
+    console.log(err)
+    // erifica se é um erro de validação para dar uma resposta persoanlizada ao cliente
+    if (err.name === 'ValidationError') {
       throw createError(400, 'Erro de validação verifique os campos enviados')
+    }
 
-
-    // criação de um erro de requisição ma formada 
+    // criação de um erro de requisição mal formada
     throw createError(400)
   }
 })
 
 handler
   .use(doNotWaitForEmptyEventLoop()) // adiciona o context.doNotWaitForEmptyEventLoop = false
-  // .use(warmup({ waitForEmptyEventLoop: false })) // retorna de forma rapida quando é um evento warmup
+  .use(warmup({ waitForEmptyEventLoop: false })) // retorna de forma rapida quando é um evento warmup
+  .use(cors()) // adiciona os headers do cors (tem que ser antes do response)
   .use(httpErrorHandler()) // valida qualquer erro do formato http-errors
   .use(jsonBodyParser()) // parseia o body em formato json
   .use(urlEncodeBodyParser({ extended: true })) // parseia a url em formato json
+  .use(validator({ inputSchema: jsonRequest })) // faz uma validação dos dados de entrada atraves de um jsonSchema
 
 module.exports = { handler }

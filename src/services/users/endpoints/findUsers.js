@@ -28,8 +28,9 @@ const handler = middy(async (event, context) => {
 })
 
 handler
-  .use(doNotWaitForEmptyEventLoop())
-  .use(warmup({ waitForEmptyEventLoop: false }))
-  .use(httpErrorHandler())
+  .use(doNotWaitForEmptyEventLoop()) // adiciona o context.doNotWaitForEmptyEventLoop = false
+  .use(warmup({ waitForEmptyEventLoop: false })) // retorna de forma rapida quando é um evento warmup
+  .use(cors()) // adiciona os headers do cors (tem que ser antes do response)
+  .use(httpErrorHandler()) // valida qualquer erro do formato http-errors
 
 module.exports = { handler }

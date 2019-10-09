@@ -47,7 +47,18 @@ const UserSchema = new Schema(
 // encriptação antes de salvar na database
 UserSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 10)
-  return this, next()
+  next()
+})
+
+// encriptação ao atualizar
+UserSchema.pre('findOneAndUpdate', async function (next) {
+  console.log(this._update)
+
+  const { password } = this._update
+
+  if (password) this._update.password = await bcrypt.hash(password, 10)
+  console.log(this._update.password)
+  next()
 })
 
 // verificação se esta rodando offline para executar um delete do model

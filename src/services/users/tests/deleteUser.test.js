@@ -4,15 +4,14 @@
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default
 const { createConnection } = require('../../../database/mongo/connection')
-const { handler } = require('../endpoints/updateUser')
+const { handler } = require('../endpoints/deleteUser')
 const User = require('../../../database/mongo/models/User')
 const { ObjectId } = require('mongodb')
 const createError = require('http-errors')
 
-// mock opcional pois require do mockingoose ja mock a conexão
 jest.mock('../../../database/mongo/connection')
 
-describe('Test update user:', () => {
+describe('Test to delete user:', () => {
   const _id = new mongoose.Types.ObjectId()
   const user = {
     _id,
@@ -30,13 +29,14 @@ describe('Test update user:', () => {
   })
 
   beforeAll(() => {
-    createConnection.mockImplementation(() => Promise.resolve(true))
+    createConnection.mockImplementation(() => Promise.resolve())
   })
 
-  it('update as successfully:', async done => {
+  it('test delete user successfully:', async done => {
     const event = { pathParameters: { id: _id } }
+    console.log(event)
 
-    mockingoose(User).toReturn(user, 'findOneAndUpdate')
+    mockingoose(User).toReturn(user, 'findOneAndDelete')
 
     const result = await handler(event, context)
 
@@ -51,9 +51,9 @@ describe('Test update user:', () => {
     const event = { pathParameters: { id } }
 
     if (ObjectId.isValid(id)) {
-      mockingoose(User).toReturn({ id: 1 }, 'findOneAndUpdate')
+      mockingoose(User).toReturn({ id: 1 }, 'findOneAndDelete')
     } else {
-      mockingoose(User).toReturn(createError(422), 'findOneAndUpdate')
+      mockingoose(User).toReturn(createError(422), 'findOneAndDelete')
     }
 
     const result = await handler(event, context)
@@ -66,7 +66,7 @@ describe('Test update user:', () => {
     const id = 1
     const event = { pathParameters: { id } }
 
-    mockingoose(User).toReturn(null, 'findOneAndUpdate')
+    mockingoose(User).toReturn(null, 'findOneAndDelete')
 
     const result = await handler(event, context)
 
@@ -77,7 +77,7 @@ describe('Test update user:', () => {
   it('timeout error:', async done => {
     const event = { pathParameters: { id: _id } }
 
-    mockingoose(User).toReturn(new Error('Timeout'), 'findOneAndUpdate')
+    mockingoose(User).toReturn(new Error('Timeout'), 'findOneAndDelete')
 
     try {
       await handler(event, context)
