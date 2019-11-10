@@ -1,5 +1,3 @@
-'use strict'
-
 // requires do test
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default

@@ -1,5 +1,3 @@
-'use strict'
-
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default
 const { createConnection } = require('../../../database/mongo/connection')
