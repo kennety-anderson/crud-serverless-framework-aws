@@ -1,0 +1,42 @@
+#function para cadastro de usuarios
+createUser:
+  warmup: true
+  handler: src/services/users/endpoints/createUser.handler
+  events:
+    - http:
+        path: /users
+        method: post
+
+#function para a listagem de usuarios
+findUsers:
+  warmup: true
+  handler: src/services/users/endpoints/findUsers.handler
+  events:
+    - http:
+        path: /users
+        method: get
+
+#function para a bsca de um unico usuario
+findOneUser:
+  warmup: true
+  handler: src/services/users/endpoints/findOneUser.handler
+  events:
+    - http:
+        path: /users/{id}
+        method: get
+
+updateUser:
+  warmup: true
+  handler: src/services/users/endpoints/updateUser.handler
+  events:
+    - http:
+        path: /users/{id}
+        method: put
+
+deleteUser:
+  warmup: true
+  handler: src/services/users/endpoints/deleteUser.handler
+  events:
+    - http:
+        path: /users/{id}
+        method: delete
