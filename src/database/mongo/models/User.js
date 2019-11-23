@@ -31,8 +31,8 @@ const UserSchema = new Schema(
     },
     permission: {
       type: String,
-      default: 'USER',
-      enum: ['USER', 'ADMIN']
+      default: 'CUSTOMER',
+      enum: ['CUSTOMER', 'USER', 'ADMIN']
     },
     status: {
       type: Boolean,
@@ -58,7 +58,6 @@ UserSchema.pre('findOneAndUpdate', async function (next) {
     this._update.password = await bcrypt.hash(this._update.password, 10)
     next()
   }
-  // console.log(this._update.password)
   next()
 })
 

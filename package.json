@@ -34,7 +34,7 @@
   "license": "ISC",
   "standard": {
     "ignore": [
-      "src/services/users/tests/*"
+      "src/services/*/tests/*"
     ]
   }
 }
