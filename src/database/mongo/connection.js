@@ -11,6 +11,7 @@ const createConnection = async (uri = process.env.MONGO_URI) => {
   const connection = await connect(
     uri,
     {
+      useCreateIndex: true,
       useUnifiedTopology: true,
       useNewUrlParser: true,
       reconnectTries: 100,

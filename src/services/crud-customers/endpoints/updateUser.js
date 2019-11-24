@@ -3,10 +3,9 @@ const doNotWaitForEmptyEventLoop = require('@middy/do-not-wait-for-empty-event-l
 const warmup = require('@middy/warmup')
 const cors = require('@middy/http-cors')
 const httpErroHandler = require('@middy/http-error-handler')
-const jsonBodyParser = require('@middy/http-json-body-parser')
 const urlEncodeBodyParser = require('@middy/http-urlencode-body-parser')
 const validator = require('@middy/validator')
-const jsonRequest = require('../../../../models/users/requests/update.json')
+const jsonRequest = require('../../../../models/customers/requests/update.json')
 const createError = require('http-errors')
 const { ObjectId } = require('mongodb')
 const { createConnection } = require('../../../database/mongo/connection')
@@ -46,7 +45,6 @@ handler
   .use(warmup({ waitForEmptyEventLoop: false })) // retorna de forma rapida quando é um evento warmup
   .use(cors()) // adiciona os headers do cors (tem que ser antes do response)
   .use(httpErroHandler()) // valida qualquer erro do formato http-errors
-  .use(jsonBodyParser()) // parseia o body em formato json
   .use(urlEncodeBodyParser({ extended: true })) // parseia a url em formato json
   .use(validator({ inputSchema: jsonRequest })) // faz uma validação dos dados de entrada atraves de um jsonSchema
 

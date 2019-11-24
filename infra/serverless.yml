@@ -8,3 +8,5 @@ resources:
   Resources:
     SnsCreatedCustomerEvent: ${file(./sns-create-customer/snsEventCreate.yml)}
     SnsUpdatedCustomerEvent: ${file(./sns-update-customer/snsEventUpdate.yml)}
+  Outputs:
+    SnsCreatedCustomerEventTopicarn: ${file(./sns-create-customer/snsEventCreateTopicArn.yml)}
