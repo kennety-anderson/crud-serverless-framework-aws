@@ -25,6 +25,9 @@
     "standard": "^14.2.0"
   },
   "scripts": {
+    "deploy:env": "npm install; npm run deploy:infra:env && sls deploy --stage $NODE_ENV -v",
+    "deploy": "export NODE_ENV=dev && npm run deploy:env",
+    "deploy:infra:env": "cd infra; SLS_DEBUG=* sls deploy --stage $NODE_ENV -v",
     "start": "sls offline start --stage local",
     "test": "standard && jest --coverage",
     "lint": "standard"
@@ -34,7 +37,7 @@
   "license": "ISC",
   "standard": {
     "ignore": [
-      "src/services/*/tests/*"
+      "src/services/*/__tests__/*"
     ]
   }
 }

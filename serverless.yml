@@ -1,7 +1,8 @@
-service: crud-users-${self:custom.stage}
+service: crud-customers
 
 provider:
   name: aws
+  region: ${opt:region, 'us-east-1'}
   runtime: nodejs10.x
   environment: ${file(config/${self:custom.stage}.yml):environment} # pega a varivel de acordo com o ambiente
 
@@ -11,4 +12,4 @@ plugins:
 custom:
   stage: ${opt:stage, self:provider.stage, 'local'}
 
-functions: ${file(src/services/users/endpoints/_functions.yml)}
+functions: ${file(src/services/crud-customers/endpoints/_functions.yml)}
