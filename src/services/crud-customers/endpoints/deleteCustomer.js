@@ -6,7 +6,7 @@ const httpErroHandler = require('@middy/http-error-handler')
 const createError = require('http-errors')
 const { ObjectId } = require('mongodb')
 const { createConnection } = require('../../../database/mongo/connection')
-const User = require('../../../database/mongo/models/User')
+const Customer = require('../../../database/mongo/models/Customer')
 
 const handler = middy(async (event, context) => {
   const { id } = event.pathParameters
@@ -16,9 +16,9 @@ const handler = middy(async (event, context) => {
 
     if (!ObjectId.isValid(id)) throw createError(422, 'ID malformed')
 
-    const data = await User.findOneAndDelete({ _id: id })
+    const data = await Customer.findOneAndDelete({ _id: id })
 
-    if (!data) throw createError(404, 'User is not found!')
+    if (!data) throw createError(404, 'Customer is not found!')
 
     return {
       statusCode: 200,

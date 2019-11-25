@@ -1,7 +1,7 @@
 #function para cadastro de customer
-createUser:
+createCustomer:
   warmup: true
-  handler: src/services/crud-customers/endpoints/createUser.handler
+  handler: src/services/crud-customers/endpoints/createCustomer.handler
   environment:
     SNS_TOPIC_CUSTOMER_CREATE:
       Fn::ImportValue: ${self:custom.stage}:${self:service}-infra:customersCreateEventsTopicArn
@@ -13,31 +13,31 @@ createUser:
         - sns:Publish
   events:
     - http:
-        path: /users
+        path: /customers
         method: post
 
 #function para a listagem de customers
-findUsers:
+findCustomers:
   warmup: true
-  handler: src/services/crud-customers/endpoints/findUsers.handler
+  handler: src/services/crud-customers/endpoints/findCustomers.handler
   events:
     - http:
-        path: /users
+        path: /customers
         method: get
 
 #function para a bsca de um unico customer
-findOneUser:
+findOneCustomer:
   warmup: true
-  handler: src/services/crud-customers/endpoints/findOneUser.handler
+  handler: src/services/crud-customers/endpoints/findOneCustomer.handler
   events:
     - http:
-        path: /users/{id}
+        path: /customers/{id}
         method: get
 
 #function para atulaizar customer
-updateUser:
+updateCustomer:
   warmup: true
-  handler: src/services/crud-customers/endpoints/updateUser.handler
+  handler: src/services/crud-customers/endpoints/updateCustomer.handler
   environment:
     SNS_TOPIC_CUSTOMER_UPDATE:
       Fn::ImportValue: ${self:custom.stage}:${self:service}-infra:customersUpdateEventsTopicArn
@@ -49,14 +49,14 @@ updateUser:
         - sns:Publish
   events:
     - http:
-        path: /users/{id}
+        path: /customers/{id}
         method: put
 
 #function para deletar customers
-deleteUser:
+deleteCustomer:
   warmup: true
-  handler: src/services/crud-customers/endpoints/deleteUser.handler
+  handler: src/services/crud-customers/endpoints/deleteCustomer.handler
   events:
     - http:
-        path: /users/{id}
+        path: /customers/{id}
         method: delete

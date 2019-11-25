@@ -1,5 +1,3 @@
-'use strict'
-
 const middy = require('@middy/core')
 const doNotWaitForEmptyEventLoop = require('@middy/do-not-wait-for-empty-event-loop')
 const warmup = require('@middy/warmup')
@@ -7,13 +5,13 @@ const cors = require('@middy/http-cors')
 const httpErrorHandler = require('@middy/http-error-handler')
 const createError = require('http-errors')
 const { createConnection } = require('../../../database/mongo/connection')
-const User = require('../../../database/mongo/models/User')
+const Customer = require('../../../database/mongo/models/Customer')
 
 const handler = middy(async (event, context) => {
   try {
     await createConnection()
 
-    const data = await User.find()
+    const data = await Customer.find()
 
     return {
       statusCode: 200,
