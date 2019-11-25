@@ -8,6 +8,7 @@ provider:
 
 plugins:
   - serverless-offline
+  - serverless-iam-roles-per-function
 
 custom:
   stage: ${opt:stage, self:provider.stage, 'local'}

@@ -7,8 +7,8 @@ const warmup = require('@middy/warmup')
 const cors = require('@middy/http-cors')
 const httpErrorHandler = require('@middy/http-error-handler')
 const urlEncodeBodyParser = require('@middy/http-urlencode-body-parser')
-// const validator = require('@middy/validator')
-// const jsonRequest = require('../../../../models/customers/requests/create.json')
+const validator = require('@middy/validator')
+const jsonRequest = require('../../../../models/customers/requests/create.json')
 const createError = require('http-errors')
 const { createConnection } = require('../../../database/mongo/connection')
 const User = require('../../../database/mongo/models/User')
@@ -16,11 +16,7 @@ const User = require('../../../database/mongo/models/User')
 const sns = new AWS.SNS()
 
 const handler = middy(async (event, context) => {
-  console.log('caiu na função')
-
   const body = JSON.parse(event.body)
-  console.log(body, 'bodyyy')
-  console.log(process.env.SNS_TOPIC_CUSTOMER_CREATE)
 
   try {
     await createConnection() // criando conexão com o banco de dados
@@ -28,23 +24,19 @@ const handler = middy(async (event, context) => {
     const data = await User.create(body)
 
     const params = {
-      Message: 'ola mundo',
+      Message: JSON.stringify(data),
       TopicArn: process.env.SNS_TOPIC_CUSTOMER_CREATE
     }
 
-    const snsEvent = await sns.publish(params).promise()
-    console.log(sns)
+    await sns.publish(params).promise()
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        _id: data._id,
-        sns: snsEvent
+        _id: data._id
       })
     }
   } catch (err) {
-    console.log(err)
-
     // erifica se é um erro de validação para dar uma resposta persoanlizada ao cliente
     if (err.name === 'ValidationError') {
       throw createError(400, 'Erro de validação verifique os campos enviados')
@@ -61,6 +53,6 @@ handler
   .use(cors()) // adiciona os headers do cors (tem que ser antes do response)
   .use(httpErrorHandler()) // valida qualquer erro do formato http-errors
   .use(urlEncodeBodyParser({ extended: true })) // parseia a url em formato json
-// .use(validator({ inputSchema: jsonRequest })) // faz uma validação dos dados de entrada atraves de um jsonSchema
+  .use(validator({ inputSchema: jsonRequest })) // faz uma validação dos dados de entrada atraves de um jsonSchema
 
 module.exports = { handler }

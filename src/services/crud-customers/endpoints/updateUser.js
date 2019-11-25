@@ -1,3 +1,4 @@
+const AWS = require('aws-sdk')
 const middy = require('@middy/core')
 const doNotWaitForEmptyEventLoop = require('@middy/do-not-wait-for-empty-event-loop')
 const warmup = require('@middy/warmup')
@@ -11,6 +12,8 @@ const { ObjectId } = require('mongodb')
 const { createConnection } = require('../../../database/mongo/connection')
 const User = require('../../../database/mongo/models/User')
 
+const sns = new AWS.SNS()
+
 const handler = middy(async (event, context) => {
   const { id } = event.pathParameters
   const body = event.body
@@ -23,6 +26,13 @@ const handler = middy(async (event, context) => {
     const data = await User.findOneAndUpdate({ _id: id }, body, { new: true })
 
     if (!data) throw createError(404, 'User is not found!')
+
+    const params = {
+      Message: JSON.stringify(data),
+      TopicArn: process.env.SNS_TOPIC_CUSTOMER_UPDATE
+    }
+
+    await sns.publish(params).promise()
 
     return {
       statusCode: 200,

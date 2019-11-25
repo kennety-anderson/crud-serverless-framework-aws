@@ -1,4 +1,4 @@
-#function para cadastro de usuarios
+#function para cadastro de customer
 createUser:
   warmup: true
   handler: src/services/crud-customers/endpoints/createUser.handler
@@ -16,7 +16,7 @@ createUser:
         path: /users
         method: post
 
-#function para a listagem de usuarios
+#function para a listagem de customers
 findUsers:
   warmup: true
   handler: src/services/crud-customers/endpoints/findUsers.handler
@@ -25,7 +25,7 @@ findUsers:
         path: /users
         method: get
 
-#function para a bsca de um unico usuario
+#function para a bsca de um unico customer
 findOneUser:
   warmup: true
   handler: src/services/crud-customers/endpoints/findOneUser.handler
@@ -34,14 +34,25 @@ findOneUser:
         path: /users/{id}
         method: get
 
+#function para atulaizar customer
 updateUser:
   warmup: true
   handler: src/services/crud-customers/endpoints/updateUser.handler
+  environment:
+    SNS_TOPIC_CUSTOMER_UPDATE:
+      Fn::ImportValue: ${self:custom.stage}:${self:service}-infra:customersUpdateEventsTopicArn
+  iamRoleStatements:
+    - Effect: "Allow"
+      Resource:
+        Fn::ImportValue: ${self:custom.stage}:${self:service}-infra:customersUpdateEventsTopicArn
+      Action:
+        - sns:Publish
   events:
     - http:
         path: /users/{id}
         method: put
 
+#function para deletar customers
 deleteUser:
   warmup: true
   handler: src/services/crud-customers/endpoints/deleteUser.handler

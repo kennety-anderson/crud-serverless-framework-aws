@@ -21,6 +21,7 @@
   "devDependencies": {
     "jest": "^24.9.0",
     "mockingoose": "^2.13.2",
+    "serverless-iam-roles-per-function": "^2.0.2",
     "serverless-offline": "^5.10.1",
     "standard": "^14.2.0"
   },

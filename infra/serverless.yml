@@ -10,3 +10,4 @@ resources:
     SnsUpdatedCustomerEvent: ${file(./sns-update-customer/snsEventUpdate.yml)}
   Outputs:
     SnsCreatedCustomerEventTopicarn: ${file(./sns-create-customer/snsEventCreateTopicArn.yml)}
+    SnsUpdatedCustomerEventTopicarn: ${file(./sns-update-customer/snsEventUpdateTopicArn.yml)}
