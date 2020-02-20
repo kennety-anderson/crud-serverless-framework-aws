@@ -1,2 +1,2 @@
 environment:
-  MONGO_URI: ${ssm:/db/connectionMongo}
+  MONGO_URI: ${ssm:/db/mongodb/uri}

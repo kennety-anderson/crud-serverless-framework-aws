@@ -15,6 +15,7 @@ createCustomer:
     - http:
         path: /customers
         method: post
+        cors: true
 
 #function para a listagem de customers
 findCustomers:
@@ -24,6 +25,7 @@ findCustomers:
     - http:
         path: /customers
         method: get
+        cors: true
 
 #function para a bsca de um unico customer
 findOneCustomer:
@@ -33,6 +35,7 @@ findOneCustomer:
     - http:
         path: /customers/{id}
         method: get
+        cors: true
 
 #function para atulaizar customer
 updateCustomer:
@@ -51,6 +54,7 @@ updateCustomer:
     - http:
         path: /customers/{id}
         method: put
+        cors: true
 
 #function para deletar customers
 deleteCustomer:
@@ -60,3 +64,4 @@ deleteCustomer:
     - http:
         path: /customers/{id}
         method: delete
+        cors: true
