@@ -2,8 +2,8 @@
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default
 const { createConnection } = require('../../../database/mongo/connection')
-const { handler } = require('../endpoints/updateUser')
-const User = require('../../../database/mongo/models/User')
+const { handler } = require('../endpoints/updateCustomer')
+const Customer = require('../../../database/mongo/models/Customer')
 const { ObjectId } = require('mongodb')
 const mongodb = require('mongodb')
 const createError = require('http-errors')
@@ -11,16 +11,30 @@ const createError = require('http-errors')
 // mock opcional pois require do mockingoose ja mock a conexão
 jest.mock('../../../database/mongo/connection')
 
-describe('Test update user:', () => {
+jest.mock('aws-sdk', () => {
+  return {
+    SNS: function () {
+      return {
+        publish: () => {
+          return {
+            promise: () => {}
+          }
+        }
+      }
+    }
+  }
+})
+
+describe('Test update customer:', () => {
   const _id = new mongoose.Types.ObjectId()
-  const user = {
+  const customer = {
     _id,
     name: 'kenny',
     email: 'kem@gmail.com',
     cpf: '01234567891',
     password: '12345678',
     birthDate: '2000-01-01'
-  } // exemplo de um objeto de cadastro de user
+  } // exemplo de um objeto de cadastro de customer
 
   const context = {}
 
@@ -33,26 +47,29 @@ describe('Test update user:', () => {
   })
 
   it('update as successfully:', async done => {
-    const event = { pathParameters: { id: _id }, body: { ...user } }
+    const event = {
+      pathParameters: { id: _id },
+      body: JSON.stringify(customer)
+    }
 
-    mockingoose(User).toReturn(user, 'findOneAndUpdate')
+    mockingoose(Customer).toReturn(customer, 'findOneAndUpdate')
 
     const result = await handler(event, context)
 
     expect(result).toHaveProperty('statusCode', 200)
     expect(result).toHaveProperty('body')
-    expect(JSON.parse(result.body)).toHaveProperty('user')
+    expect(JSON.parse(result.body)).toHaveProperty('data')
     done()
   })
 
   it('received id malformed:', async done => {
     let id = 'abc'
-    const event = { pathParameters: { id }, body: { ...user } }
+    const event = { pathParameters: { id }, body: { ...Customer } }
 
     if (ObjectId.isValid(id)) {
-      mockingoose(User).toReturn({ id: 1 }, 'findOneAndUpdate')
+      mockingoose(Customer).toReturn({ id: 1 }, 'findOneAndUpdate')
     } else {
-      mockingoose(User).toReturn(createError(422), 'findOneAndUpdate')
+      mockingoose(Customer).toReturn(createError(422), 'findOneAndUpdate')
     }
 
     const result = await handler(event, context)
@@ -61,11 +78,11 @@ describe('Test update user:', () => {
     done()
   })
 
-  it('user is not found:', async done => {
+  it('Customer is not found:', async done => {
     const id = 1
-    const event = { pathParameters: { id }, body: { ...user } }
+    const event = { pathParameters: { id }, body: { ...customer } }
 
-    mockingoose(User).toReturn(null, 'findOneAndUpdate')
+    mockingoose(Customer).toReturn(null, 'findOneAndUpdate')
 
     const result = await handler(event, context)
 
@@ -76,7 +93,7 @@ describe('Test update user:', () => {
   it('timeout error:', async done => {
     const event = { pathParameters: { id: _id } }
 
-    mockingoose(User).toReturn(new Error('Timeout'), 'findOneAndUpdate')
+    mockingoose(Customer).toReturn(new Error('Timeout'), 'findOneAndUpdate')
 
     try {
       await handler(event, context)
@@ -88,10 +105,10 @@ describe('Test update user:', () => {
   })
 
   it('internal server error:', async done => {
-    const event = { pathParameters: { id: _id }, body: { ...user } }
+    const event = { pathParameters: { id: _id }, body: { ...Customer } }
     const error = mongodb.MongoError
 
-    mockingoose(User).toReturn(error, 'findOneAndUpdate')
+    mockingoose(Customer).toReturn(error, 'findOneAndUpdate')
 
     const result = await handler(event, context)
 

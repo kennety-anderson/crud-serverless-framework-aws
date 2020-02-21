@@ -2,23 +2,23 @@
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default
 const { createConnection } = require('../../../database/mongo/connection')
-const { handler } = require('../endpoints/deleteUser')
-const User = require('../../../database/mongo/models/User')
+const { handler } = require('../endpoints/deleteCustomer')
+const Customer = require('../../../database/mongo/models/Customer')
 const { ObjectId } = require('mongodb')
 const createError = require('http-errors')
 
 jest.mock('../../../database/mongo/connection')
 
-describe('Test to delete user:', () => {
+describe('Test to delete customer:', () => {
   const _id = new mongoose.Types.ObjectId()
-  const user = {
+  const customer = {
     _id,
     name: 'kenny',
     email: 'kem@gmail.com',
     cpf: '01234567891',
     password: '12345678',
     birthDate: '01/01/2000'
-  } // exemplo de um objeto de cadastro de user
+  } // exemplo de um objeto de cadastro de Customer
 
   const context = {}
 
@@ -30,17 +30,19 @@ describe('Test to delete user:', () => {
     createConnection.mockImplementation(() => Promise.resolve())
   })
 
-  it('test delete user successfully:', async done => {
+  it('test delete customer successfully:', async done => {
     const event = { pathParameters: { id: _id } }
     console.log(event)
 
-    mockingoose(User).toReturn(user, 'findOneAndDelete')
+    mockingoose(Customer).toReturn(customer, 'findOneAndDelete')
 
     const result = await handler(event, context)
 
+    console.log('body', result.body)
+
     expect(result).toHaveProperty('statusCode', 200)
     expect(result).toHaveProperty('body')
-    expect(JSON.parse(result.body)).toHaveProperty('user')
+    expect(JSON.parse(result.body)).toHaveProperty('data')
     done()
   })
 
@@ -49,9 +51,9 @@ describe('Test to delete user:', () => {
     const event = { pathParameters: { id } }
 
     if (ObjectId.isValid(id)) {
-      mockingoose(User).toReturn({ id: 1 }, 'findOneAndDelete')
+      mockingoose(Customer).toReturn({ id: 1 }, 'findOneAndDelete')
     } else {
-      mockingoose(User).toReturn(createError(422), 'findOneAndDelete')
+      mockingoose(Customer).toReturn(createError(422), 'findOneAndDelete')
     }
 
     const result = await handler(event, context)
@@ -60,11 +62,11 @@ describe('Test to delete user:', () => {
     done()
   })
 
-  it('user is not found:', async done => {
+  it('Customer is not found:', async done => {
     const id = 1
     const event = { pathParameters: { id } }
 
-    mockingoose(User).toReturn(null, 'findOneAndDelete')
+    mockingoose(Customer).toReturn(null, 'findOneAndDelete')
 
     const result = await handler(event, context)
 
@@ -75,7 +77,7 @@ describe('Test to delete user:', () => {
   it('timeout error:', async done => {
     const event = { pathParameters: { id: _id } }
 
-    mockingoose(User).toReturn(new Error('Timeout'), 'findOneAndDelete')
+    mockingoose(Customer).toReturn(new Error('Timeout'), 'findOneAndDelete')
 
     try {
       await handler(event, context)

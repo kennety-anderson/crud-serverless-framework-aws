@@ -1,15 +1,15 @@
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default
 const { createConnection } = require('../../../database/mongo/connection')
-const { handler } = require('../endpoints/findUsers')
-const User = require('../../../database/mongo/models/User')
+const { handler } = require('../endpoints/findCustomers')
+const Customer = require('../../../database/mongo/models/Customer')
 
 jest.mock('../../../database/mongo/connection')
 
-describe('Find and list users', () => {
+describe('Find and list customer', () => {
   const _id = new mongoose.Types.ObjectId().toHexString()
 
-  const user = {
+  const customer = {
     _id,
     name: 'kenny',
     email: 'kem@gmail.com',
@@ -28,24 +28,24 @@ describe('Find and list users', () => {
     createConnection.mockImplementation(() => Promise.resolve(true))
   })
 
-  it('list total users:', async done => {
-    const users = [user]
+  it('list total customer:', async done => {
+    const data = [customer]
     const event = {}
 
-    mockingoose(User).toReturn(users, 'find')
+    mockingoose(Customer).toReturn(data, 'find')
 
     const result = await handler(event, context)
 
     expect(result).toHaveProperty('statusCode', 200)
     expect(result).toHaveProperty('body')
-    expect(JSON.parse(result.body).users).toHaveLength(1)
+    expect(JSON.parse(result.body).data).toHaveLength(1)
     done()
   })
 
-  it('finding users error', async done => {
+  it('finding customer error', async done => {
     const event = { queryStringParameters: {} }
 
-    mockingoose(User).toReturn(new Error('Timeout'), 'find')
+    mockingoose(Customer).toReturn(new Error('Timeout'), 'find')
 
     try {
       await handler(event, context)
