@@ -1,0 +1,3 @@
+Type: AWS::SNS::Topic
+Properties:
+  DisplayName: ${self:service}-${self:provider.stage}-custumerCreatedEvent

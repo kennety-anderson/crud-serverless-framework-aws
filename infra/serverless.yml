@@ -1,0 +1,13 @@
+service: ${file(../serverless.yml):service, 'service'}-infra
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+
+resources:
+  Resources:
+    SnsCreatedCustomerEvent: ${file(./sns-created-customer/snsEventCreated.yml)}
+    SnsUpdatedCustomerEvent: ${file(./sns-updated-customer/snsEventUpdated.yml)}
+  Outputs:
+    SnsCreatedCustomerEventTopicarn: ${file(./sns-created-customer/snsEventCreatedTopicArn.yml)}
+    SnsUpdatedCustomerEventTopicarn: ${file(./sns-updated-customer/snsEventUpdatedTopicArn.yml)}

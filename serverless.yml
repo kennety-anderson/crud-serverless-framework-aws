@@ -1,0 +1,16 @@
+service: crud-customers
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  runtime: nodejs10.x
+  environment: ${file(config/${self:custom.stage}.yml):environment} # pega a varivel de acordo com o ambiente
+
+plugins:
+  - serverless-offline
+  - serverless-iam-roles-per-function
+
+custom:
+  stage: ${opt:stage, self:provider.stage, 'local'}
+
+functions: ${file(src/services/crud-customers/endpoints/_functions.yml)}

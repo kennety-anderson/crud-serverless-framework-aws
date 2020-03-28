@@ -1,0 +1,5 @@
+Description: "Sns topic create custumer changes events messages"
+Value:
+  Ref: SnsCreatedCustomerEvent
+Export:
+  Name: ${self:provider.stage}:${self:service}:customersCreatedEventsTopicArn

@@ -1,0 +1,43 @@
+{
+  "name": "test05",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "dependencies": {
+    "@middy/core": "^1.0.0-alpha.41",
+    "@middy/do-not-wait-for-empty-event-loop": "^1.0.0-alpha.41",
+    "@middy/http-cors": "^1.0.0-alpha.41",
+    "@middy/http-error-handler": "^1.0.0-alpha.41",
+    "@middy/http-json-body-parser": "^1.0.0-alpha.41",
+    "@middy/validator": "^1.0.0-alpha.45",
+    "@middy/warmup": "^1.0.0-alpha.41",
+    "aws-sdk": "^2.526.0",
+    "bcryptjs": "^2.4.3",
+    "http-errors": "^1.7.3",
+    "mongodb": "^3.3.2",
+    "mongoose": "^5.7.5"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "mockingoose": "^2.13.2",
+    "serverless-iam-roles-per-function": "^2.0.2",
+    "serverless-offline": "^5.10.1",
+    "standard": "^14.2.0"
+  },
+  "scripts": {
+    "deploy:env": "npm install; npm run deploy:infra:env && sls deploy --stage $NODE_ENV -v",
+    "deploy": "export NODE_ENV=dev && npm run deploy:env",
+    "deploy:infra:env": "cd infra; SLS_DEBUG=* sls deploy --stage $NODE_ENV -v",
+    "start": "sls offline start --stage local",
+    "test": "standard && jest --coverage",
+    "lint": "standard"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "standard": {
+    "ignore": [
+      "src/services/*/__tests__/*"
+    ]
+  }
+}
