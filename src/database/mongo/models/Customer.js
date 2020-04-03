@@ -34,6 +34,10 @@ const CustomerSchema = new Schema(
       default: "CUSTOMER",
       enum: ["CUSTOMER", "USER", "ADMIN"]
     },
+    avatar: {
+      type: String,
+      required: false
+    },
     status: {
       type: Boolean,
       default: true

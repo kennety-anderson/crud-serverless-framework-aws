@@ -8,7 +8,7 @@ Este é um serviço de cadastro para clientes, em um baco de dados mongodb, util
 
 ### Create
 
-Para criar um novo cadastro basta enviar o body em formato `json` com o metodo `post`, os seguintes campos são obrigatorios `name`, `email`, `birtdate`, `cpf` e `password`, caso um desses campos não seja enviada a api retornara um erro `400` com a mensagem `Erro de validação verifique os campos enviados`.
+Para criar um novo cadastro basta enviar o body em formato `json` com o metodo post, os seguintes campos são obrigatorios `name`, `email`, `birtdate`, `cpf` e `password`, caso um desses campos não seja enviada a api retornara um erro `400` com a mensagem `Erro de validação verifique os campos enviados`.
 
 > /customers - POST
 
