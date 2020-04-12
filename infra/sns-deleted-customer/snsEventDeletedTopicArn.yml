@@ -1,0 +1,5 @@
+Description: "Sns topic deleted custumer changes events messages"
+Value:
+  Ref: SnsDeletedCustomerEvent
+Export:
+  Name: ${self:provider.stage}:${self:service}:customersDeletedEventsTopicArn
