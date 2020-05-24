@@ -57,7 +57,7 @@ PsychologistSchema.methods.toJSON = function () {
   const psychologistObject = this.toObject()
   delete psychologistObject.password
 
-  return customerObject
+  return psychologistObject
 }
 
 // encriptação antes de salvar na database
@@ -77,7 +77,7 @@ PsychologistSchema.pre('findOneAndUpdate', async function (next) {
 })
 
 // verificação se esta rodando offline para executar um delete do model
-if (process.env.IS_OFFLINE) delete connection.models.Customer
+if (process.env.IS_OFFLINE) delete connection.models.Psychologist
 
 // export do model
 module.exports = model('Psychologist', PsychologistSchema)
