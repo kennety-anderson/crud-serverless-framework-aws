@@ -1,5 +1,3 @@
-'use strict'
-
 const AWS = require('aws-sdk')
 const middy = require('@middy/core')
 const doNotWaitForEmptyEventLoop = require('@middy/do-not-wait-for-empty-event-loop')
