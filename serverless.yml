@@ -1,4 +1,4 @@
-service: crud-customers
+service: customers-service
 
 provider:
   name: aws
@@ -13,4 +13,4 @@ plugins:
 custom:
   stage: ${opt:stage, self:provider.stage, 'local'}
 
-functions: ${file(src/services/crud-customers/endpoints/_functions.yml)}
+functions: ${file(src/services/customers/endpoints/_functions.yml)}
