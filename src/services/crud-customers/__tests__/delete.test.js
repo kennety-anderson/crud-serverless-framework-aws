@@ -2,30 +2,14 @@
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default
 const { createConnection } = require('../../../database/mongo/connection')
-const { handler } = require('../endpoints/updateCustomer')
+const { handler } = require('../endpoints/delete')
 const Customer = require('../../../database/mongo/models/Customer')
 const { ObjectId } = require('mongodb')
-const mongodb = require('mongodb')
 const createError = require('http-errors')
 
-// mock opcional pois require do mockingoose ja mock a conexão
 jest.mock('../../../database/mongo/connection')
 
-jest.mock('aws-sdk', () => {
-  return {
-    SNS: function () {
-      return {
-        publish: () => {
-          return {
-            promise: () => {}
-          }
-        }
-      }
-    }
-  }
-})
-
-describe('Test update customer:', () => {
+describe('Test to delete customer:', () => {
   const _id = new mongoose.Types.ObjectId()
   const customer = {
     _id,
@@ -33,8 +17,8 @@ describe('Test update customer:', () => {
     email: 'kem@gmail.com',
     cpf: '01234567891',
     password: '12345678',
-    birthDate: '2000-01-01'
-  } // exemplo de um objeto de cadastro de customer
+    birthDate: '01/01/2000'
+  } // exemplo de um objeto de cadastro de Customer
 
   const context = {}
 
@@ -43,18 +27,18 @@ describe('Test update customer:', () => {
   })
 
   beforeAll(() => {
-    createConnection.mockImplementation(() => Promise.resolve(true))
+    createConnection.mockImplementation(() => Promise.resolve())
   })
 
-  it('update as successfully:', async done => {
-    const event = {
-      pathParameters: { id: _id },
-      body: JSON.stringify(customer)
-    }
+  it('test delete customer successfully:', async done => {
+    const event = { pathParameters: { id: _id } }
+    console.log(event)
 
-    mockingoose(Customer).toReturn(customer, 'findOneAndUpdate')
+    mockingoose(Customer).toReturn(customer, 'findOneAndDelete')
 
     const result = await handler(event, context)
+
+    console.log('body', result.body)
 
     expect(result).toHaveProperty('statusCode', 200)
     expect(result).toHaveProperty('body')
@@ -64,12 +48,12 @@ describe('Test update customer:', () => {
 
   it('received id malformed:', async done => {
     let id = 'abc'
-    const event = { pathParameters: { id }, body: { ...Customer } }
+    const event = { pathParameters: { id } }
 
     if (ObjectId.isValid(id)) {
-      mockingoose(Customer).toReturn({ id: 1 }, 'findOneAndUpdate')
+      mockingoose(Customer).toReturn({ id: 1 }, 'findOneAndDelete')
     } else {
-      mockingoose(Customer).toReturn(createError(422), 'findOneAndUpdate')
+      mockingoose(Customer).toReturn(createError(422), 'findOneAndDelete')
     }
 
     const result = await handler(event, context)
@@ -80,9 +64,9 @@ describe('Test update customer:', () => {
 
   it('Customer is not found:', async done => {
     const id = 1
-    const event = { pathParameters: { id }, body: { ...customer } }
+    const event = { pathParameters: { id } }
 
-    mockingoose(Customer).toReturn(null, 'findOneAndUpdate')
+    mockingoose(Customer).toReturn(null, 'findOneAndDelete')
 
     const result = await handler(event, context)
 
@@ -93,7 +77,7 @@ describe('Test update customer:', () => {
   it('timeout error:', async done => {
     const event = { pathParameters: { id: _id } }
 
-    mockingoose(Customer).toReturn(new Error('Timeout'), 'findOneAndUpdate')
+    mockingoose(Customer).toReturn(new Error('Timeout'), 'findOneAndDelete')
 
     try {
       await handler(event, context)
@@ -101,18 +85,6 @@ describe('Test update customer:', () => {
       expect(err.message).toEqual('Timeout')
     }
 
-    done()
-  })
-
-  it('internal server error:', async done => {
-    const event = { pathParameters: { id: _id }, body: { ...Customer } }
-    const error = mongodb.MongoError
-
-    mockingoose(Customer).toReturn(error, 'findOneAndUpdate')
-
-    const result = await handler(event, context)
-
-    expect(result).toHaveProperty('statusCode', 500)
     done()
   })
 })

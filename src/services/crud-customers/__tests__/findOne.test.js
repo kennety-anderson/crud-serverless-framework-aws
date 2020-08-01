@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default
 const { createConnection } = require('../../../database/mongo/connection')
-const { handler } = require('../endpoints/findOneCustomer')
+const { handler } = require('../endpoints/findOne')
 const Customer = require('../../../database/mongo/models/Customer')
 const { ObjectId } = require('mongodb')
 const createError = require('http-errors')

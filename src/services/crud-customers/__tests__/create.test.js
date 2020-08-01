@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const mockingoose = require("mockingoose").default;
 const { createConnection } = require("../../../database/mongo/connection");
-const { handler } = require("../endpoints/createCustomer");
+const { handler } = require("../endpoints/create");
 const Customer = require("../../../database/mongo/models/Customer");
 
 // mock opcional pois require do mockingoose ja mock a conexão
@@ -14,7 +14,7 @@ jest.mock("aws-sdk", () => {
       return {
         publish: () => {
           return {
-            promise: () => {},
+            promise: () => { },
           };
         },
       };

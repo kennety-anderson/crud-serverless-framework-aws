@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const mockingoose = require('mockingoose').default
 const { createConnection } = require('../../../database/mongo/connection')
-const { handler } = require('../endpoints/findCustomers')
+const { handler } = require('../endpoints/find')
 const Customer = require('../../../database/mongo/models/Customer')
 
 jest.mock('../../../database/mongo/connection')

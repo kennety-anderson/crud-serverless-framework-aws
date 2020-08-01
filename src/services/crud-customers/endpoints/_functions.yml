@@ -1,7 +1,7 @@
 #function para cadastro de customer
 createCustomer:
   warmup: true
-  handler: src/services/crud-customers/endpoints/createCustomer.handler
+  handler: src/services/crud-customers/endpoints/create.handler
   environment:
     SNS_TOPIC_CUSTOMER_CREATE:
       Fn::ImportValue: ${self:custom.stage}:${self:service}-infra:customersCreatedEventsTopicArn
@@ -20,7 +20,7 @@ createCustomer:
 #function para a listagem de customers
 findCustomers:
   warmup: true
-  handler: src/services/crud-customers/endpoints/findCustomers.handler
+  handler: src/services/crud-customers/endpoints/find.handler
   events:
     - http:
         path: /customers
@@ -30,7 +30,7 @@ findCustomers:
 #function para a bsca de um unico customer
 findOneCustomer:
   warmup: true
-  handler: src/services/crud-customers/endpoints/findOneCustomer.handler
+  handler: src/services/crud-customers/endpoints/findOne.handler
   events:
     - http:
         path: /customers/{id}
@@ -40,7 +40,7 @@ findOneCustomer:
 #function para atulaizar customer
 updateCustomer:
   warmup: true
-  handler: src/services/crud-customers/endpoints/updateCustomer.handler
+  handler: src/services/crud-customers/endpoints/update.handler
   environment:
     SNS_TOPIC_CUSTOMER_UPDATE:
       Fn::ImportValue: ${self:custom.stage}:${self:service}-infra:customersUpdatedEventsTopicArn
@@ -59,7 +59,7 @@ updateCustomer:
 #function para deletar customers
 deleteCustomer:
   warmup: true
-  handler: src/services/crud-customers/endpoints/deleteCustomer.handler
+  handler: src/services/crud-customers/endpoints/delete.handler
   events:
     - http:
         path: /customers/{id}
