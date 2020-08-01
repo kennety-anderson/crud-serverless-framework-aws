@@ -6,10 +6,10 @@ provider:
 
 resources:
   Resources:
-    SnsCreatedCustomerEvent: ${file(./sns-created-customer/snsEventCreated.yml)}
-    SnsUpdatedCustomerEvent: ${file(./sns-updated-customer/snsEventUpdated.yml)}
-    SnsDeletedCustomerEvent: ${file(./sns-deleted-customer/snsEventDeleted.yml)}
+    SnsCreatedCustomerEvent: ${file(./SNS/sns-created-customer/snsEventCreated.yml)}
+    SnsUpdatedCustomerEvent: ${file(./SNS/sns-updated-customer/snsEventUpdated.yml)}
+    SnsDeletedCustomerEvent: ${file(./SNS/sns-deleted-customer/snsEventDeleted.yml)}
   Outputs:
-    SnsCreatedCustomerEventTopicarn: ${file(./sns-created-customer/snsEventCreatedTopicArn.yml)}
-    SnsUpdatedCustomerEventTopicarn: ${file(./sns-updated-customer/snsEventUpdatedTopicArn.yml)}
-    SnsDeletedCustomerEventTopicArn: ${file(./sns-deleted-customer/snsEventDeletedTopicArn.yml)}
+    SnsCreatedCustomerEventTopicarn: ${file(./SNS/sns-created-customer/snsEventCreatedTopicArn.yml)}
+    SnsUpdatedCustomerEventTopicarn: ${file(./SNS/sns-updated-customer/snsEventUpdatedTopicArn.yml)}
+    SnsDeletedCustomerEventTopicArn: ${file(./SNS/sns-deleted-customer/snsEventDeletedTopicArn.yml)}
