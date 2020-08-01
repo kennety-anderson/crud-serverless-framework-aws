@@ -25,7 +25,7 @@ const PsychologistSchema = new Schema(
       minlength: 11,
       required: [true, 'E necessario o cpf']
     },
-    bithdate: {
+    birthdate: {
       type: String,
       required: [true, 'E necessaria a data de nascimento']
     },
