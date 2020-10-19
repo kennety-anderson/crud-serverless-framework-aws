@@ -6,27 +6,27 @@ const CustomerSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, 'E necessario um nome de usuario']
+      required: [true, 'É necessario um nome de usuario']
     },
     email: {
       type: String,
-      required: [true, 'E necessario um email unico de usuario'],
+      required: [true, 'É necessario um email unico de usuario'],
       unique: true
     },
     cpf: {
       type: String,
-      required: [true, 'E necessario um cpf'],
+      required: [true, 'É necessario um cpf'],
       maxlength: 11,
       minlength: 11,
       unique: true
     },
     birthdate: {
       type: String,
-      required: [true, 'E necessaria a data de nascimento']
+      required: [true, 'É necessaria a data de nascimento']
     },
     password: {
       type: String,
-      required: [true, 'E necessaria a escolha de uma senha'],
+      required: [true, 'É necessaria a escolha de uma senha'],
       minlength: 8
     },
     permission: {
