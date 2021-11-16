@@ -11,7 +11,7 @@
     "@middy/http-json-body-parser": "^1.0.0-alpha.41",
     "@middy/validator": "^1.0.0-alpha.45",
     "@middy/warmup": "^1.0.0-alpha.41",
-    "aws-sdk": "^2.526.0",
+    "aws-sdk": "^2.814.0",
     "bcryptjs": "^2.4.3",
     "http-errors": "^1.7.3",
     "mongodb": "^3.3.2",
