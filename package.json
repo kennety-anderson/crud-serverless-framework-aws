@@ -16,7 +16,7 @@
     "http-errors": "^1.8.1",
     "mongodb": "^4.2.2",
     "mongoose": "^6.1.2",
-    "serverless": "^2.69.1"
+    "serverless": "^3.25.1"
   },
   "devDependencies": {
     "eslint": "^7.4.0",
